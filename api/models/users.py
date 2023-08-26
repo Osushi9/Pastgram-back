@@ -1,4 +1,5 @@
 from api.database import db, ma
+from datetime import datetime
 
 
 class User(db.Model):  # type: ignore
@@ -12,6 +13,7 @@ class User(db.Model):  # type: ignore
     follower = db.Column(db.Text)
     comments = db.relationship('comment', backref='user', lazy='dynamic')
     photos = db.relationship('photo', backref='user', lazy='dynamic')
+    created_at = db.Column(db.DateTime, nullable=False, default=datetime.now)
     
 
     def __repr__(self):
