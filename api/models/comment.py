@@ -16,4 +16,4 @@ class Comment(db.Model):  # type: ignore
 class CommentSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = Comment
-        fields = ("id","user_id", "user_name", "photo_id", "content", "time")
+        fields = ("user_id", "content", "time")
