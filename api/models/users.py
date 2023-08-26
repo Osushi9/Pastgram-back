@@ -2,11 +2,17 @@ from api.database import db, ma
 
 
 class User(db.Model):  # type: ignore
-    __tablename__ = "users"
+    __tablename__ = "user"
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(50), nullable=False, unique=True)
     password = db.Column(db.String(50), nullable=False)
+    icon = db.Column(db.String(50))
+    follow = db.Column(db.Text)
+    follower = db.Column(db.Text)
+    comments = db.relationship('comment', backref='user', lazy='dynamic')
+    photos = db.relationship('photo', backref='user', lazy='dynamic')
+    
 
     def __repr__(self):
         return "<User %r>" % self.name
@@ -36,4 +42,4 @@ class User(db.Model):  # type: ignore
 class UserSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = User
-        fields = ("id","name", "password")
+        fields = ("id","name", "password", "icon", "follow", "followers")
