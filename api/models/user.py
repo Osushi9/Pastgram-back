@@ -1,6 +1,6 @@
 from api.database import db, ma
 from flask_bcrypt import generate_password_hash, check_password_hash
-from flask_login import LoginManager, UserMixin
+from flask_login import UserMixin
 
 
 class User(db.Model, UserMixin):  # type: ignore

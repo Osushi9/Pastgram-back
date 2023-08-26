@@ -1,7 +1,8 @@
-from flask import Flask, make_response, jsonify
+from flask import Flask
 from flask_login import LoginManager
 from api.models.user import User
-from api.views.login import login
+from api.views.auth import auth
+from api.views.home import home
 from flask_cors import CORS
 from api.database import db
 
@@ -16,7 +17,8 @@ CORS(app)
 app.config.from_object("config.Config")
 db.init_app(app)
 
-app.register_blueprint(login, url_prefix="/login")
+app.register_blueprint(auth, url_prefix="/auth")
+app.register_blueprint(home, url_prefix="/home")
 
 login_manager = LoginManager(app)
 

@@ -1,12 +1,11 @@
 from flask import Blueprint, request, jsonify
 from api.models.user import User
-from flask_login import login_required, login_user, logout_user, current_user
+from flask_login import login_user, logout_user, current_user
+
+auth = Blueprint("auth", __name__)
 
 
-login = Blueprint("login", __name__)
-
-
-@login.route("/", methods=["POST"])
+@auth.route("/login", methods=["POST"])
 def id_login():
     data = request.json
 
@@ -27,7 +26,7 @@ def id_login():
         return jsonify(response_data), 401
 
 
-@login.route("/signup", methods=["POST"])
+@auth.route("/signup", methods=["POST"])
 def signup():
     data = request.json
 
@@ -45,15 +44,8 @@ def signup():
     return jsonify({"message": "User created successfully"}), 201
 
 
-@login.route("/logout")
+@auth.route("/logout", methods=["POST"])
 def logout():
-    print(current_user.is_authenticated)
     if current_user.is_authenticated:
         logout_user()  # ユーザーをログアウトさせる
     return jsonify({"message": "User logged out"}), 200
-
-
-@login.route("/test", methods=["GET"])
-@login_required
-def test():
-    return jsonify({"message": "test"}), 200
