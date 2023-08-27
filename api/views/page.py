@@ -9,6 +9,13 @@ from api.lib.user import *
 page = Blueprint("page", __name__)
 
 
+@page.route("/", methods=["GET"])
+def index():
+    if get_current_user_id() is not None:
+        return jsonify({"message": "Hello World!"}), 200
+    else:
+        return jsonify({"message": "User not logged in"}), 401
+
 @page.route("/header", methods=["GET"])
 def getHeaderInfo():
     tag = get_current_tag()
@@ -38,15 +45,21 @@ def getPostList():
     return jsonify(response)
 
 
+@page.route("/header", methods=["GET"])
+def getHeader():
+    response = {"tag": get_current_tag(), "limit": get_current_limit()}
+    return jsonify(response)
+
+
 @page.route("/post", methods=["POST"])
 def createPost():
     image_path = request.form.get("image_path")
-    create_at = request.form.get("create_at")
+    taken_at = request.form.get("taken_at")
 
     current_user_id = get_current_user_id()
 
-    post_fields = ["id", "image_path", "create_at"]
-    post = create_post(current_user_id, image_path, create_at, fields=post_fields)
+    post_fields = ["id", "image_path", "taken_at"]
+    post = create_post(current_user_id, image_path, taken_at, fields=post_fields)
 
     response = {"post": post}
 
@@ -55,12 +68,12 @@ def createPost():
 
 @page.route("/post", methods=["GET"])
 def getPosts():
-    user_id = int(request.args.get("user_id"))
+    user_id = int(request.json.get("user_id"))
 
     user_fields = ["id", "name", "icon_path"]
     user = get_user(user_id, fields=user_fields)
 
-    post_fields = ["id", "image_path", "likes", "comments"]
+    post_fields = ["id", "image_path", "like_counts", "comments"]
     posts = get_posts(user_id, fields=post_fields)
 
     response = {
@@ -73,12 +86,12 @@ def getPosts():
 
 @page.route("/profile", methods=["GET"])
 def getProfile():
-    user_id = int(request.args.get("user_id"))
+    user_id = int(request.json.get("user_id"))
 
     user_fields = ["id", "name", "icon_path", "followee_amount", "follower_amount"]
     user = get_user(user_id, fields=user_fields)
 
-    post_fields = ["id", "create_at", "image_path"]
+    post_fields = ["id", "taken_at", "image_path"]
     posts = get_posts(user_id, fields=post_fields)
 
     response = {"user": user, "posts": posts}
