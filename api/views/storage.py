@@ -1,5 +1,4 @@
 from flask import Blueprint, Response, request, make_response, jsonify
-from api.models import User, UserSchema
 from config import AwsClient, BucketName
 import json
 import uuid

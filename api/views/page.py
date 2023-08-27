@@ -1,5 +1,4 @@
 from flask import Blueprint, request, jsonify
-from api.models import User, UserSchema
 import json
 from api.lib.theme import *
 from api.lib.user import *
@@ -8,12 +7,21 @@ from api.lib.post import *
 # ルーティング設定
 page_router = Blueprint("page_router", __name__)
 
+@page_router.route("/header", methods=["GET"])
+def getHeaderInfo():
+    tag = get_current_tag()
+    limit = get_current_limit()
+
+    response = {
+        "tag": tag,
+        "limit": limit
+    }
+
+    return jsonify(response)
+
 @page_router.route("/home", methods=["GET"])
 def getPostList():
     current_user_id = get_current_user_id()
-
-    tag = get_current_tag()
-    limit = get_current_limit()
 
     followee_ids = get_followee_ids(current_user_id)
 
@@ -22,8 +30,6 @@ def getPostList():
     thumnails = list(filter(lambda x: x is not None, thumnails))
 
     response = {
-        "tag": tag,
-        "limit": limit,
         "thumnails": thumnails
     }
 
@@ -55,12 +61,7 @@ def getPosts():
     post_fields = ["id", "image_path", "likes", "comments"]
     posts = get_posts(user_id, fields=post_fields)
 
-    tag = get_current_tag()
-    limit = get_current_limit()
-
     response = {
-        "tag": tag,
-        "limit": limit,
         "user": user,
         "posts": posts
     }
