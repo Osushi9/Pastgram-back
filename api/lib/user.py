@@ -93,3 +93,9 @@ def search_users(query, fields=["id", "name", "icon_path"]):
         Users.query.filter(Users.name.like(f"{query}%")).all(),
         fields,
     )
+
+def request_follow(followee_id, follower_id):
+    pass
+
+def accept_follow(followee_id, follower_id):
+    pass

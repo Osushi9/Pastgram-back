@@ -52,3 +52,7 @@ def logout():
     if current_user.is_authenticated:
         logout_user()  # ユーザーをログアウトさせる
     return jsonify({"message": "User logged out"}), 200
+
+@auth.route("/active", methods=["GET"])
+def active():
+    return jsonify({"active": current_user.is_authenticated})
