@@ -1,6 +1,5 @@
-import json
-
 from flask import Blueprint, jsonify, request
+import json
 
 from api.lib.post import *
 from api.lib.theme import *
@@ -10,20 +9,31 @@ from api.lib.user import *
 page = Blueprint("page", __name__)
 
 
+@page.route("/header", methods=["GET"])
+def getHeaderInfo():
+    tag = get_current_tag()
+    limit = get_current_limit()
+
+    response = {
+        "tag": tag,
+        "limit": limit
+    }
+
+    return jsonify(response)
+
 @page.route("/home", methods=["GET"])
 def getPostList():
     current_user_id = get_current_user_id()
-
-    tag = get_current_tag()
-    limit = get_current_limit()
 
     followee_ids = get_followee_ids(current_user_id)
 
     thumnail_fields = ["id", "latest_create", "latest_path", "amount"]
     thumnails = map(lambda id: get_thumnail(id, fields=thumnail_fields), followee_ids)
     thumnails = list(filter(lambda x: x is not None, thumnails))
-
-    response = {"tag": tag, "limit": limit, "thumnails": thumnails}
+    
+    response = {
+        "thumnails": thumnails
+    }
 
     return jsonify(response)
 
@@ -53,10 +63,10 @@ def getPosts():
     post_fields = ["id", "image_path", "likes", "comments"]
     posts = get_posts(user_id, fields=post_fields)
 
-    tag = get_current_tag()
-    limit = get_current_limit()
-
-    response = {"tag": tag, "limit": limit, "user": user, "posts": posts}
+    response = {
+        "user": user,
+        "posts": posts
+    }
 
     return jsonify(response)
 

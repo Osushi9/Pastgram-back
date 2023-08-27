@@ -65,4 +65,6 @@ def get_followers(user_id, fields=["name", "icon_path"]):
 
 
 def search_users(query, fields=["id", "name", "icon_path"]):
-    return userSchema.marshall(user2, fields)
+    return [
+        userSchema.marshall(user2, fields)
+    ]

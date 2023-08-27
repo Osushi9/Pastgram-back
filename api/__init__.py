@@ -1,7 +1,6 @@
 from flask import Flask
 from flask_cors import CORS
 from flask_login import LoginManager
-
 from api.database import db
 from api.views.auth import auth
 from api.views.home import home
