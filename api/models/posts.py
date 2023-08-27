@@ -24,3 +24,6 @@ class Posts(db.Model):  # type: ignore
     def registerPost(self):
         db.session.add(self)
         db.session.commit()
+    
+    def savePost(self):
+        db.session.commit()

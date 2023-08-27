@@ -20,7 +20,8 @@ def get_follower_amount(user):
 
 
 userSchema = Schema(
-    followee_amount=get_followee_amount, follower_amount=get_follower_amount
+    followee_amount=get_followee_amount,
+    follower_amount=get_follower_amount
 )
 
 
@@ -43,14 +44,13 @@ def update_user(
     if name is not None:
         user.name = name
     if password is not None:
-        # user.password = password
-        pass
+        user.password = password
     if profile_name is not None:
         user.profile_name = profile_name
     if icon_path is not None:
         user.icon_path = icon_path
 
-    db.session.commit()
+    user.saveUser()
 
     return userSchema.marshall(user, fields)
 
@@ -70,26 +70,30 @@ def get_followee_ids(user_id):
 
 
 def get_followees(user_id, fields=["name", "icon_path"]):
-    # return [userSchema.marshall(user2, fields), userSchema.marshall(user3, fields)]
     return userSchema.marshall_many(
-        Follows.query.filter_by(followee_id=user_id).all(), fields
+        Follows.query.filter_by(followee_id=user_id).filter_by(confirmed=True).all(),
+        fields
     )
 
 
 def get_followers(user_id, fields=["name", "icon_path"]):
     return userSchema.marshall_many(
-        Follows.query.filter_by(follower_id=user_id).all(), fields
+        Follows.query.filter_by(follower_id=user_id).filter_by(confirmed=True).all(),
+        fields
     )
 
 
 def search_users(query, fields=["id", "name", "icon_path"]):
     return userSchema.marshall_many(
         Users.query.filter(Users.name.like(f"{query}%")).all(),
-        fields,
+        fields
     )
 
 def request_follow(followee_id, follower_id):
-    pass
+    follow = Follows(followee_id, follower_id, confirmed=False)
+    follow.registerFollow()
 
 def accept_follow(followee_id, follower_id):
-    pass
+    follow = Follows.query.filter_by(followee_id=followee_id, follower_id=follower_id).first()
+    follow.confirmed = True
+    follow.saveFollow()

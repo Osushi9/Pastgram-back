@@ -22,3 +22,6 @@ class Comments(db.Model):  # type: ignore
     def registerComment(self):
         db.session.add(self)
         db.session.commit()
+
+    def saveComment(self):
+        db.session.commit()

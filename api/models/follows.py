@@ -21,3 +21,6 @@ class Follows(db.Model):  # type: ignore
     def registerFollow(self):
         db.session.add(self)
         db.session.commit()
+
+    def saveFollow(self):
+        db.session.commit()

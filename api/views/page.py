@@ -57,7 +57,7 @@ def getPostDetail():
     post_id = int(request.args.get("post_id"))
 
     post_fields = ["id", "user", "image_path", "taken_at", "likes", "comments"]
-    post = get_post_detail(post_id, fields=post_fields)
+    post = get_post(post_id, fields=post_fields)
 
     response = {
         "post": post

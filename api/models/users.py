@@ -31,6 +31,9 @@ class Users(db.Model, UserMixin):  # type: ignore
         db.session.add(self)
         db.session.commit()
 
+    def saveUser(self):
+        db.session.commit()
+
     def checkPassword(self, password):
         # return check_password_hash(self.password, password)
         return self.password == password
