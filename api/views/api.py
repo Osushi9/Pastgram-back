@@ -1,8 +1,19 @@
 from flask import Blueprint, request, jsonify
 from api.lib.user import get_current_user_id, request_follow, accept_follow
-from api.lib.post import add_like, remove_like
+from api.lib.post import add_comment, add_like, remove_like
 
 api = Blueprint("api", __name__)
+
+@api.route("/comment", methods=["POST"])
+def comment():
+    post_id = int(request.form.get("post_id"))
+    content = request.form.get("content")
+
+    user_id = get_current_user_id()
+
+    add_comment(post_id, user_id, content)
+
+    return '', 200
 
 @api.route("/like", methods=["POST"])
 def like():
