@@ -20,7 +20,7 @@ class Schema:
 
         for field in self.marshall_funcs.keys():
             if field in fields:
-                result[field] = self.marshall_funcs[field](obj)
+                result[field] = self.marshall_funcs[field](dict)
                 fields.remove(field)
 
         for field in fields:

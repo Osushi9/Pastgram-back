@@ -14,20 +14,22 @@ user3 = MockUser(3, "nakamura", "中村", "icon-path-3")
 users = [user1, user2, user3]
 
 class MockPost:
-    def __init__(self, post_id, user_id, image_path, create_at, likes):
+    def __init__(self, post_id, user_id, image_path, taken_at, likes):
         self.id = post_id
         self.user_id = user_id
         self.image_path = image_path
-        self.create_at = create_at
+        self.taken_at = taken_at
         self.likes = likes
     
     def copy(self):
-        return MockPost(self.id, self.user_id, self.image_path, self.create_at, self.likes)
+        return MockPost(self.id, self.user_id, self.image_path, self.taken_at, self.likes)
+
 
 post1 = MockPost(1, 1, "image-path-1", "2023/01/01", 10)
 post2 = MockPost(2, 1, "image-path-2", "2023/02/01", 20)
 post3 = MockPost(3, 2, "image-path-3", "2023/03/01", 30)
 posts = [post1, post2, post3]
+post = post2
 
 class MockComment:
     def __init__(self, comment_id, post_id, user_id, content, time):

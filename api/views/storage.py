@@ -28,7 +28,7 @@ def Upload():
 
 @storage_router.route("/download", methods=["GET"])
 def Download():
-    filename = request.args.get('filename')
+    filename = request.args.get('image_path')
     mime = request.args.get('mime')
     image_data = download_image(filename)
     response = Response(image_data, content_type=mime)
