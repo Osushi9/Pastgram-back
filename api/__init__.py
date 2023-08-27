@@ -1,5 +1,6 @@
 from flask import Flask, make_response, jsonify
 from .views.user import user_router
+from .views.page import page_router
 from flask_cors import CORS
 from api.database import db
 import config
@@ -16,6 +17,7 @@ def create_app():
     db.init_app(app)
 
     app.register_blueprint(user_router, url_prefix="/api")
+    app.register_blueprint(page_router, url_prefix="/page")
 
     return app
 
