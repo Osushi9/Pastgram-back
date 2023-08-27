@@ -25,6 +25,7 @@ share/python-wheels/
 .installed.cfg
 *.egg
 MANIFEST
+!/api/lib
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
@@ -161,5 +162,6 @@ cython_debug/
 #.idea/
 
 *.DS_Store
+.vscode
 cookie.txt
 curl_util.sh
