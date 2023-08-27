@@ -68,3 +68,9 @@ def search_users(query, fields=["id", "name", "icon_path"]):
     return [
         userSchema.marshall(user2, fields)
     ]
+
+def request_follow(followee_id, follower_id):
+    pass
+
+def accept_follow(followee_id, follower_id):
+    pass
