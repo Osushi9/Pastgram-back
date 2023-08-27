@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from api.models.user import User
+from api.models.users import Users
 from flask_login import login_user, logout_user, current_user
 
 auth = Blueprint("auth", __name__)
@@ -12,7 +12,7 @@ def id_login():
     posted_id = data.get("id")
     posted_password = data.get("password")
 
-    user = User.query.filter_by(id=posted_id).first()
+    user = Users.query.filter_by(id=posted_id).first()
 
     if user and user.checkPassword(posted_password):
         login_user(user)
@@ -34,7 +34,7 @@ def signup():
     posted_profile_name = data.get("profile_name")
     posted_password = data.get("password")
 
-    user = User(
+    user = Users(
         posted_id,
         posted_profile_name,
         posted_password,

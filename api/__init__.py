@@ -1,6 +1,5 @@
 from flask import Flask
 from flask_login import LoginManager
-from api.models.user import User
 from api.views.auth import auth
 from api.views.home import home
 from .views.storage import storage_router
@@ -27,5 +26,6 @@ login_manager = LoginManager(app)
 
 @login_manager.user_loader
 def load_user(user_id):
+    from api.models.users import Users
     """LoginManagerをDBに対して動作させるためのメソッド"""
-    return User.query.get(user_id)
+    return Users.query.get(user_id)
