@@ -48,3 +48,9 @@ def get_thumnail(
     }
 
     return postSchema.marshall_dict(thumnail, fields)
+
+def add_like(post_id, user_id):
+    pass
+
+def remove_like(post_id, user_id):
+    pass
