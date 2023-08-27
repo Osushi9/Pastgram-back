@@ -1,54 +1,45 @@
-from api.database import db, ma
+from api.database import db
 from datetime import datetime
-from models.follow import Follow
+from sqlalchemy.ext.associationproxy import association_proxy
+from api.models.follows import Follows
 
 
-class User(db.Model):  # type: ignore
-    __tablename__ = "user"
+class Users(db.Model):  # type: ignore
+    __tablename__ = "users"
+    __table_args__ = {"extend_existing": True}
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(50), nullable=False, unique=True)
-    profile_name = db.Column(db.String(50), default=name)
+    profile_name = db.Column(db.String(50))
     password = db.Column(db.String(50), nullable=False)
     icon = db.Column(db.String(50))
-    comments = db.relationship('Comment', backref='user', lazy='dynamic')
-    photos = db.relationship('Photo', backref='user', lazy='dynamic')
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.now)
-    follows = db.relationship('Follow', backref='user', lazy='dynamic')
-    
+
+    comments = db.relationship("Comments", backref="users", lazy="dynamic")
+    posts = db.relationship("Posts", backref="users", lazy="dynamic")
+    followee_association = db.relationship(
+        "Follows",
+        foreign_keys="Follows.follower_id",
+        backref="follower",
+        lazy="dynamic",
+    )
+    follower_association = db.relationship(
+        "Follows",
+        foreign_keys="Follows.followee_id",
+        backref="followee",
+        lazy="dynamic",
+    )
+
+    follows = association_proxy(
+        "followee_association",
+        "followee",
+        creator=lambda followee: Follows(followee=followee),
+    )
+    followers = association_proxy(
+        "follower_association",
+        "follower",
+        creator=lambda follower: Follows(follower=follower),
+    )
 
     def __repr__(self):
-        return "<User %r>" % self.name
-
-    def getUserList():  # type: ignore
-        # select * from users
-        user_list = db.session.query(User).all()
-
-        if user_list == None:
-            return []
-        else:
-            return user_list
-
-    def registerUser(user):
-        record = User(
-            name=user["name"],
-            password=user["password"],
-        )
-
-        # insert into users(name, password) values(...)
-        db.session.add(record)
-        db.session.commit()
-
-        return user        
-    
-    def get_followers(id):
-        followers = Follow.query.filter_by(follow_id=id)
-        if followers == None:
-            return []
-        else:
-            return followers
-
-class UserSchema(ma.SQLAlchemyAutoSchema):
-    class Meta:
-        model = User
-        fields = ("name", "profile_name", "password", "icon")
+        return f"<User {self.name}>"
