@@ -1,7 +1,10 @@
 {
     "cSpell.words": [
+        "associationproxy",
         "autoflush",
+        "backref",
         "dotenv",
+        "followee",
         "jsonify",
         "mysqlconnector",
         "sessionmaker",
