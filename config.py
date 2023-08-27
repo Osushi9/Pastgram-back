@@ -1,8 +1,10 @@
-from dotenv import load_dotenv
 import boto3
+from dotenv import load_dotenv
+
 load_dotenv()
 
 import os
+
 
 class SystemConfig:
     DEBUG = True
@@ -21,5 +23,5 @@ class SystemConfig:
 
 Config = SystemConfig
 
-AwsClient = boto3.client('s3')
-BucketName = 'pastgram'
+AwsClient = boto3.client("s3")
+BucketName = "pastgram"

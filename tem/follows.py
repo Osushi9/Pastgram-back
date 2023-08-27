@@ -6,7 +6,10 @@ class Follows(db.Model):  # type: ignore
 
     followee_id = db.Column(db.Integer, db.ForeignKey("users.id"), primary_key=True)
     follower_id = db.Column(db.Integer, db.ForeignKey("users.id"), primary_key=True)
-    confirmed = db.Column(db.Boolean)
+    confirmed = db.Column(db.Boolean, default=False)
+
+    followee = db.relationship("Users", backref="followee", foreign_keys=[followee_id])
+    follower = db.relationship("Users", backref="follower", foreign_keys=[follower_id])
 
     def __init__(self, followee=None, follower=None, confirmed=False):
         if followee:

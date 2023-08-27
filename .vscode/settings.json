@@ -3,11 +3,18 @@
         "associationproxy",
         "autoflush",
         "backref",
+        "boto",
         "dotenv",
         "followee",
+        "followees",
+        "funcs",
         "jsonify",
         "mysqlconnector",
+        "pastgram",
+        "pymysql",
         "sessionmaker",
-        "sqlalchemy"
+        "sqlalchemy",
+        "thumnail",
+        "thumnails"
     ]
 }
