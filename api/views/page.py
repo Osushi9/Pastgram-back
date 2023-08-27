@@ -41,31 +41,26 @@ def getPostList():
 @page.route("/post", methods=["POST"])
 def createPost():
     image_path = request.form.get("image_path")
-    create_at = request.form.get("create_at")
+    taken_at = request.form.get("taken_at")
 
     current_user_id = get_current_user_id()
 
-    post_fields = ["id", "image_path", "create_at"]
-    post = create_post(current_user_id, image_path, create_at, fields=post_fields)
+    post_fields = ["id", "image_path", "taken_at"]
+    post = create_post(current_user_id, image_path, taken_at, fields=post_fields)
 
     response = {"post": post}
 
     return jsonify(response)
 
+@page.route("/postdetail", methods=["GET"])
+def getPostDetail():
+    post_id = int(request.args.get("post_id"))
 
-@page.route("/post", methods=["GET"])
-def getPosts():
-    user_id = int(request.args.get("user_id"))
-
-    user_fields = ["id", "name", "icon_path"]
-    user = get_user(user_id, fields=user_fields)
-
-    post_fields = ["id", "image_path", "likes", "comments"]
-    posts = get_posts(user_id, fields=post_fields)
+    post_fields = ["id", "user", "image_path", "taken_at", "likes", "comments"]
+    post = get_post(post_id, fields=post_fields)
 
     response = {
-        "user": user,
-        "posts": posts
+        "post": post
     }
 
     return jsonify(response)
@@ -78,7 +73,7 @@ def getProfile():
     user_fields = ["id", "name", "icon_path", "followee_amount", "follower_amount"]
     user = get_user(user_id, fields=user_fields)
 
-    post_fields = ["id", "create_at", "image_path"]
+    post_fields = ["id", "taken_at", "image_path"]
     posts = get_posts(user_id, fields=post_fields)
 
     response = {"user": user, "posts": posts}
