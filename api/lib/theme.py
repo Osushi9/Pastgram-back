@@ -1,5 +1,7 @@
+from .mock import *
+
 def get_current_tag():
-    pass
+    return tag
 
 def get_current_limit():
-    pass
+    return limit
