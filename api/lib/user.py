@@ -1,5 +1,3 @@
-from operator import or_
-
 from flask_login import current_user
 
 from api.database import db
