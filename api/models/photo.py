@@ -15,7 +15,7 @@ class Photo(db.Model):  # type: ignore
     comments = db.relationship('Comment', backref='photo', lazy='dynamic')
 
     def __repr__(self):
-        return f"{self.content} by {self.user_name}"
+        return f"<Photo #{self.id} user id:{self.user_id} likes:{self.likes} created at:{self.created_at} uploaded at:{self.uploaded_at}>"
     
     def getPhotos(tag_id):
         photos = Tag.query.get(tag_id).photos.all()

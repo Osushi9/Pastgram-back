@@ -14,11 +14,10 @@ class User(db.Model):  # type: ignore
     comments = db.relationship('Comment', backref='user', lazy='dynamic')
     photos = db.relationship('Photo', backref='user', lazy='dynamic')
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.now)
-    follows = db.relationship('Follow', backref='user', lazy='dynamic')
     
 
     def __repr__(self):
-        return "<User %r>" % self.name
+        return f"<User #{self.id}: {self.profile_name}@{self.name} created at: {self.created_at}>"
 
     def getUserList():  # type: ignore
         # select * from users
@@ -39,16 +38,18 @@ class User(db.Model):  # type: ignore
         db.session.add(record)
         db.session.commit()
 
-        return user        
+        return user
     
-    def get_followers(id):
-        followers = Follow.query.filter_by(follow_id=id)
+    def getFollowers(id, confirmed):
+        followers = Follow.query.filter_by(followee_id=id, confirmed=confirmed) 
+        
         if followers == None:
             return []
         else:
             return followers
+    
 
 class UserSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = User
-        fields = ("name", "profile_name", "password", "icon")
+        fields = ("name", "profile_name", "password", "icon", "followers", "following")

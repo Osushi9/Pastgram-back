@@ -8,4 +8,4 @@ class Tag(db.Model):  # type: ignore
     photos = db.relationship('Photo', backref='tag', lazy='dynamic')
     
     def __repr__(self):
-        return f"{self.name}"
+        return f"<Tag #{self.id}: {self.name}"
