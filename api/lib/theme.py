@@ -1,9 +1,9 @@
-from .mock import *
+from api.models.tags import Tags
 
 
 def get_current_tag():
-    return tag
+    return Tags.query.first().name
 
 
 def get_current_limit():
-    return limit
+    return Tags.query.first().limit

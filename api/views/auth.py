@@ -16,12 +16,16 @@ def name_login():
 
     user = Users.query.filter_by(name=posted_name).first()
 
-    if user and user.checkPassword(posted_password):
-        login_user(user)
-        response_data = {"message": "Authentication successful"}
-        return jsonify(response_data), 200
+    if user:
+        if user.checkPassword(posted_password):
+            login_user(user)
+            response_data = {"message": "Authentication successful"}
+            return jsonify(response_data), 200
+        else:
+            response_data = {"message": "Authentication failed - wrong password"}
+            return jsonify(response_data), 401
     else:
-        response_data = {"message": "Authentication failed"}
+        response_data = {"message": "Authentication failed - user not found"}
         return jsonify(response_data), 401
 
 

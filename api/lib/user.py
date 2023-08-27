@@ -56,11 +56,17 @@ def update_user(
 
 
 def get_current_user_id():
-    return current_user.id
+    if current_user.is_authenticated:  # ユーザーがログインしているか確認
+        return current_user.id
+    else:
+        return None
 
 
 def get_current_user(fields=["id", "name", "icon_path"]):
-    return userSchema.marshall(current_user, fields)
+    if current_user.is_authenticated:  # ユーザーがログインしているか確認
+        return userSchema.marshall(current_user, fields)
+    else:
+        return None
 
 
 def get_followee_ids(user_id):

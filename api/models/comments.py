@@ -12,7 +12,7 @@ class Comments(db.Model):  # type: ignore
     updated_at = db.Column(db.DateTime, nullable=False, default=datetime.datetime.now())
 
     def __repr__(self):
-        return f"{self.content} by {self.user_name}"
+        return f"{self.content} by {self.user_id}"
 
     def __init__(self, post_id, user_id, content):
         self.post_id = post_id
