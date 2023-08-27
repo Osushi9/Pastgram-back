@@ -3,6 +3,7 @@ from flask_login import LoginManager
 from api.models.user import User
 from api.views.auth import auth
 from api.views.home import home
+from .views.storage import storage_router
 from flask_cors import CORS
 from api.database import db
 
@@ -19,6 +20,7 @@ db.init_app(app)
 
 app.register_blueprint(auth, url_prefix="/auth")
 app.register_blueprint(home, url_prefix="/home")
+app.register_blueprint(storage_router, url_prefix="/storage")
 
 login_manager = LoginManager(app)
 

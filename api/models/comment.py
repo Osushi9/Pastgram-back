@@ -8,12 +8,12 @@ class Comment(db.Model):  # type: ignore
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     photo_id = db.Column(db.Integer, db.ForeignKey('photo.id'))
     content = db.Column(db.Text, nullable=False)
-    created_at = db.Column(db.DateTime, nullable=False, default=datetime.now)
+    time = db.Column(db.DateTime, nullable=False, default=datetime.now)
 
     def __repr__(self):
-        return f"{self.content} by {self.user_name}"
+        return f"<Comment #{self.id}: {self.content} user id:{self.user_id}>"
     
 class CommentSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = Comment
-        fields = ("id","user_id", "user_name", "photo_id", "content", "time")
+        fields = ("user_id", "content", "time")
