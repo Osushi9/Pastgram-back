@@ -15,7 +15,6 @@ def name_login():
     posted_password = data.get("password")
 
     user = Users.query.filter_by(name=posted_name).first()
-    print(user)
 
     if user and user.checkPassword(posted_password):
         login_user(user)

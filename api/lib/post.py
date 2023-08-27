@@ -1,14 +1,15 @@
+from api.models.comments import Comments
 from api.models.posts import Posts
 
-from .mock import *
 from .schema import Schema
 
 commentSchema = Schema()
 
 
-def get_comments(draft):
-    comment_field = ["content", "time"]
-    return [commentSchema.marshall(comment1, comment_field)]
+def get_comments(user):
+    comment_field = ["content", "time"]  # フィールド拡張でやってるので第2引数がとれないでここで指定
+    comment = Comments.query.filter_by(user_id=user.id).all()
+    return commentSchema.marshall_many(comment, comment_field)
 
 
 postSchema = Schema(comments=get_comments)
