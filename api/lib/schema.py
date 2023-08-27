@@ -15,6 +15,9 @@ class Schema:
 
         return result
 
+    def marshall_many(self, objs, fields):
+        return [self.marshall(obj, fields) for obj in objs]
+
     def marshall_dict(self, dict, fields):
         result = {}
 
@@ -27,3 +30,6 @@ class Schema:
             result[field] = dict[field]
 
         return result
+
+    def marshall_dict_many(self, dicts, fields):
+        return [self.marshall_dict(dict, fields) for dict in dicts]

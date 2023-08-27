@@ -1,25 +1,25 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, jsonify, request
+from flask_login import current_user, login_user, logout_user
+
+from api.lib.user import *
 from api.models.users import Users
-from flask_login import login_user, logout_user, current_user
 
 auth = Blueprint("auth", __name__)
 
 
 @auth.route("/login", methods=["POST"])
-def id_login():
+def name_login():
     data = request.json
 
-    posted_id = data.get("id")
+    posted_name = data.get("name")
     posted_password = data.get("password")
 
-    user = Users.query.filter_by(id=posted_id).first()
+    user = Users.query.filter_by(name=posted_name).first()
+    print(user)
 
     if user and user.checkPassword(posted_password):
         login_user(user)
-        response_data = {
-            "message": "Authentication successful",
-            "token": current_user.id,
-        }
+        response_data = {"message": "Authentication successful"}
         return jsonify(response_data), 200
     else:
         response_data = {"message": "Authentication failed"}
@@ -30,14 +30,14 @@ def id_login():
 def signup():
     data = request.json
 
-    posted_id = data.get("id")
+    posted_name = data.get("name")
     posted_profile_name = data.get("profile_name")
     posted_password = data.get("password")
 
     user = Users(
-        posted_id,
-        posted_profile_name,
-        posted_password,
+        name=posted_name,
+        profile_name=posted_profile_name,
+        password=posted_password,
     )
     user.registerUser()
 
@@ -49,3 +49,7 @@ def logout():
     if current_user.is_authenticated:
         logout_user()  # ユーザーをログアウトさせる
     return jsonify({"message": "User logged out"}), 200
+
+@auth.route("/active", methods=["GET"])
+def active():
+    return jsonify({"active": current_user.is_authenticated})

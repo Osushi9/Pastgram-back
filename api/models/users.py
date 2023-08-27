@@ -1,45 +1,40 @@
-from api.database import db
 from datetime import datetime
-from sqlalchemy.ext.associationproxy import association_proxy
-from api.models.follows import Follows
+
+from flask_bcrypt import check_password_hash, generate_password_hash
+from flask_login import UserMixin
+
+from api.database import db
 
 
-class Users(db.Model):  # type: ignore
+class Users(db.Model, UserMixin):  # type: ignore
     __tablename__ = "users"
     __table_args__ = {"extend_existing": True}
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(50), nullable=False, unique=True)
     profile_name = db.Column(db.String(50))
-    password = db.Column(db.String(50), nullable=False)
-    icon = db.Column(db.String(50))
+    password = db.Column(db.String(255), nullable=False)
+    icon_path = db.Column(db.String(50))
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.now)
-
-    comments = db.relationship("Comments", backref="users", lazy="dynamic")
-    posts = db.relationship("Posts", backref="users", lazy="dynamic")
-    followee_association = db.relationship(
-        "Follows",
-        foreign_keys="Follows.follower_id",
-        backref="follower",
-        lazy="dynamic",
-    )
-    follower_association = db.relationship(
-        "Follows",
-        foreign_keys="Follows.followee_id",
-        backref="followee",
-        lazy="dynamic",
-    )
-
-    follows = association_proxy(
-        "followee_association",
-        "followee",
-        creator=lambda followee: Follows(followee=followee),
-    )
-    followers = association_proxy(
-        "follower_association",
-        "follower",
-        creator=lambda follower: Follows(follower=follower),
-    )
+    is_active = db.Column(db.Boolean, default=True)
 
     def __repr__(self):
-        return f"<User {self.name}>"
+        return "<User %r>" % self.profile_name
+
+    def __init__(self, name, profile_name, password):
+        self.name = name
+        self.profile_name = profile_name
+        # self.password = generate_password_hash(password).decode("utf-8")
+        self.password = password
+
+    def registerUser(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def checkPassword(self, password):
+        # return check_password_hash(self.password, password)
+        print(self.password, password)
+        return self.password == password
+
+    def select_by_id(self, id):
+        return db.session.query(Users).filter_by(id=id).first()
