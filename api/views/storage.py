@@ -24,7 +24,7 @@ def Upload():
 
     filename = upload_image(file)
 
-    return make_response(jsonify({"code": 200, "result": filename}))
+    return make_response(jsonify({"image_path": filename}))
 
 @storage_router.route("/download", methods=["GET"])
 def Download():
