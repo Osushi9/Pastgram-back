@@ -1,6 +1,8 @@
 from flask import Blueprint, jsonify, request
 import json
 
+from flask_login import login_required
+
 from api.lib.post import *
 from api.lib.theme import *
 from api.lib.user import *
@@ -17,6 +19,7 @@ def index():
         return jsonify({"message": "User not logged in"}), 401
 
 @page.route("/header", methods=["GET"])
+@login_required
 def getHeaderInfo():
     tag = get_current_tag()
     limit = get_current_limit()
@@ -29,6 +32,7 @@ def getHeaderInfo():
     return jsonify(response)
 
 @page.route("/home", methods=["GET"])
+@login_required
 def getPostList():
     current_user_id = get_current_user_id()
 
@@ -46,12 +50,14 @@ def getPostList():
 
 
 @page.route("/header", methods=["GET"])
+@login_required
 def getHeader():
     response = {"tag": get_current_tag(), "limit": get_current_limit()}
     return jsonify(response)
 
 
 @page.route("/post", methods=["POST"])
+@login_required
 def createPost():
     image_path = request.form.get("image_path")
     taken_at = request.form.get("taken_at")
@@ -67,6 +73,7 @@ def createPost():
 
 
 @page.route("/post", methods=["GET"])
+@login_required
 def getPosts():
     user_id = int(request.args.get("user_id"))
 
@@ -85,6 +92,7 @@ def getPosts():
 
 
 @page.route("/profile", methods=["GET"])
+@login_required
 def getProfile():
     user_id = int(request.args.get("user_id"))
 
@@ -100,6 +108,7 @@ def getProfile():
 
 
 @page.route("/profile", methods=["POST"])
+@login_required
 def updateProfile():
     name = request.form.get("name")
     password = request.form.get("password")
@@ -119,6 +128,7 @@ def updateProfile():
 
 
 @page.route("/followee", methods=["GET"])
+@login_required
 def getFollowee():
     user_id = int(request.args.get("user_id"))
 
@@ -131,6 +141,7 @@ def getFollowee():
 
 
 @page.route("/follower", methods=["GET"])
+@login_required
 def getFollower():
     user_id = int(request.args.get("user_id"))
 
@@ -143,6 +154,7 @@ def getFollower():
 
 
 @page.route("/users", methods=["GET"])
+@login_required
 def searchUser():
     query = request.args.get("query")
 

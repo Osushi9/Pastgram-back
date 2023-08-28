@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify, request
-from flask_login import current_user, login_user, logout_user
+from flask_login import current_user, login_required, login_user, logout_user
 
 from api.lib.user import *
 from api.models.users import Users
@@ -48,10 +48,12 @@ def signup():
 
 
 @auth.route("/logout", methods=["POST"])
+@login_required
 def logout():
     if current_user.is_authenticated:
         logout_user()  # ユーザーをログアウトさせる
     return jsonify({"message": "User logged out"}), 200
+
 
 @auth.route("/active", methods=["GET"])
 def active():
