@@ -37,7 +37,7 @@ def getPostList():
     thumnail_fields = ["id", "latest_create", "latest_path", "amount"]
     thumnails = map(lambda id: get_thumnail(id, fields=thumnail_fields), followee_ids)
     thumnails = list(filter(lambda x: x is not None, thumnails))
-    
+
     response = {
         "thumnails": thumnails
     }
@@ -68,7 +68,7 @@ def createPost():
 
 @page.route("/post", methods=["GET"])
 def getPosts():
-    user_id = int(request.json.get("user_id"))
+    user_id = int(request.args.get("user_id"))
 
     user_fields = ["id", "name", "icon_path"]
     user = get_user(user_id, fields=user_fields)
@@ -86,7 +86,7 @@ def getPosts():
 
 @page.route("/profile", methods=["GET"])
 def getProfile():
-    user_id = int(request.json.get("user_id"))
+    user_id = int(request.args.get("user_id"))
 
     user_fields = ["id", "name", "icon_path", "followee_amount", "follower_amount"]
     user = get_user(user_id, fields=user_fields)
