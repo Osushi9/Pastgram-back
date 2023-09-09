@@ -16,7 +16,6 @@ class Users(db.Model, UserMixin):  # type: ignore
     password = db.Column(db.String(255), nullable=False)
     icon_path = db.Column(db.String(50))
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.now)
-    is_active = db.Column(db.Boolean, default=True)
 
     def __repr__(self):
         return "<User %r>" % self.profile_name
