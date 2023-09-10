@@ -1,5 +1,6 @@
 from api.models.comments import Comments
 from api.models.posts import Posts
+from api.lib.tag import get_current_tag
 
 from .schema import Schema
 
@@ -24,7 +25,8 @@ def create_post(user_id, image_path, taken_at, fields=["id", "image_path", "take
     if user_id is None:
         return {"error": "user_id is required"}
     else:
-        post = Posts(user_id, image_path, taken_at)
+        tag = get_current_tag()
+        post = Posts(user_id, image_path, taken_at, tag.id)
         post.registerPost()
         return postSchema.marshall(post, fields)
 

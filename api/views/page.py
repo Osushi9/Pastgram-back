@@ -1,10 +1,9 @@
 from flask import Blueprint, jsonify, request
-import json
 
 from flask_login import login_required
 
 from api.lib.post import *
-from api.lib.theme import *
+from api.lib.tag import *
 from api.lib.user import *
 
 # ルーティング設定
@@ -20,7 +19,7 @@ def index():
 
 @page.route("/header", methods=["GET"])
 def getHeaderInfo():
-    tag = get_current_tag()
+    tag = get_current_tag_name()
     limit = get_current_limit()
 
     response = {
