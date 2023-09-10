@@ -6,13 +6,10 @@ from api.models.users import Users
 
 auth = Blueprint("auth", __name__)
 
-
 @auth.route("/login", methods=["POST"])
 def name_login():
-    data = request.json
-
-    posted_name = data.get("name")
-    posted_password = data.get("password")
+    posted_name = request.form.get("name")
+    posted_password = request.form.get("password")
 
     user = Users.query.filter_by(name=posted_name).first()
 

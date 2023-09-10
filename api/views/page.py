@@ -19,7 +19,6 @@ def index():
         return jsonify({"message": "User not logged in"}), 401
 
 @page.route("/header", methods=["GET"])
-@login_required
 def getHeaderInfo():
     tag = get_current_tag()
     limit = get_current_limit()
@@ -36,25 +35,17 @@ def getHeaderInfo():
 def getPostList():
     current_user_id = get_current_user_id()
 
-    followee_ids = get_followee_ids(current_user_id)
+    user_ids = get_followee_ids(current_user_id)
+    user_ids.insert(0, current_user_id)
 
-    thumnail_fields = ["id", "latest_create", "latest_path", "amount"]
-    thumnails = map(lambda id: get_thumnail(id, fields=thumnail_fields), followee_ids)
-    thumnails = list(filter(lambda x: x is not None, thumnails))
+    thumnail_fields = ["id", "taken_at", "image_path"]
+    thumnails = [thumnail for id in user_ids for thumnail in get_posts(id, fields=thumnail_fields)]
 
     response = {
         "thumnails": thumnails
     }
 
     return jsonify(response)
-
-
-@page.route("/header", methods=["GET"])
-@login_required
-def getHeader():
-    response = {"tag": get_current_tag(), "limit": get_current_limit()}
-    return jsonify(response)
-
 
 @page.route("/post", methods=["POST"])
 @login_required

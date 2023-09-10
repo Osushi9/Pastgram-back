@@ -1,5 +1,5 @@
-import json
 import uuid
+import mimetypes
 
 from flask import Blueprint, Response, jsonify, make_response, request
 
@@ -8,17 +8,18 @@ from config import AwsClient, BucketName
 # ルーティング設定
 storage_router = Blueprint("storage_router", __name__)
 
+mimetypes.init()
+
 
 def upload_image(file):
-    filename = str(uuid.uuid1())
+    extension = mimetypes.guess_extension(file.filename)
+    filename = str(uuid.uuid1()) + extension
     AwsClient.upload_fileobj(file.stream, BucketName, filename)
     return filename
-
 
 def download_image(filename):
     response = AwsClient.get_object(Bucket=BucketName, Key=filename)
     return response["Body"].read()
-
 
 @storage_router.route("/upload", methods=["POST"])
 def Upload():
@@ -37,7 +38,7 @@ def Upload():
 @storage_router.route("/download", methods=["GET"])
 def Download():
     image_path = request.args.get("image_path")
-    mime = request.args.get("mime")
     image_data = download_image(image_path)
-    response = Response(image_data, content_type=mime)
+    content_type = mimetypes.guess_type(image_path)[0] or "image/jpeg"
+    response = Response(image_data, content_type=content_type)
     return response

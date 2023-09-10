@@ -11,7 +11,7 @@ app = Flask(__name__)
 app.secret_key = "secret_key"
 
 # CORS対応
-CORS(app)
+CORS(app, supports_credentials=True)
 
 # DB設定を読み込む
 app.config.from_object("config.Config")
